@@ -41,9 +41,12 @@ def plot_news(pca_result, label):
 if __name__ == "__main__":
     fake_news, real_news = get_news_dataset()
 
+    # Change Data Limit to 0 if we're going to go full model
     data_limit = 500
-    fake_news = fake_news[:data_limit]
-    real_news = real_news[:data_limit]
+    # Limit the data (for low RAM capacity purpose)
+    if data_limit:
+        fake_news = fake_news[:data_limit]
+        real_news = real_news[:data_limit]
 
     documents = np.concatenate((fake_news, real_news))
     labels = np.concatenate((np.zeros(len(fake_news)), np.ones(len(real_news))))
