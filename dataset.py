@@ -1,7 +1,6 @@
 import pandas as pd
 
 def get_news_dataset():
-
     news_dataset_dir = "news_dataset/"
     fake_news_dir = news_dataset_dir + "Fake.csv"
     true_news_dir = news_dataset_dir + "True.csv"
