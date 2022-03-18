@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from pca import TfIdf_PCA, plot_news
+from models import TextModel
 from dataset import get_news_dataset
 
 if __name__ == "__main__":
@@ -17,8 +17,8 @@ if __name__ == "__main__":
     documents = np.concatenate((fake_news, real_news))
     labels = np.concatenate((np.zeros(len(fake_news)), np.ones(len(real_news))))
 
-    model = TfIdf_PCA()
-    result = model.fit_transform(documents)
+    # model = TfIdf_PCA()
+    # result = model.fit_transform(documents)
 
-    plot_news(result, labels)
-    plt.show()
+    # plot_news(result, labels)
+    # plt.show()

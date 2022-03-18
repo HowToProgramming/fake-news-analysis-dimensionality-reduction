@@ -2,8 +2,6 @@ import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import PCA
 
-
-
 class TfIdf_PCA():
     def __init__(self, pca_ndim=2):
         self.pca_ndim = pca_ndim
