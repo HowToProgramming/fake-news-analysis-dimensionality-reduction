@@ -1,3 +1,7 @@
 news_dataset
 fake_real.png
 __pycache__
+acc_plot/*
+archives/*
+result_accuracy.json
+result.json

@@ -1,18 +1,10 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
-
-from models import TextModel, k_fold_cross_validation
+import time
+import json
+from model import create_models, evaluate_model
 from dataset import get_news_dataset
 
-pca_dim = 10
-RandomForestTextPCA = TextModel(RandomForestClassifier(), pca_dim)
-GradientBoostingTextPCA = TextModel(GradientBoostingClassifier(), pca_dim)
-LogisticTextPCA = TextModel(LogisticRegression(), pca_dim)
-RandomForestText = TextModel(RandomForestClassifier())
-GradientBoostingText = TextModel(GradientBoostingClassifier())
-LogisticText = TextModel(LogisticRegression())
+t = time.time()
 
 fake_news, real_news = get_news_dataset()
 
@@ -26,34 +18,16 @@ if data_limit:
 documents = np.concatenate((fake_news, real_news))
 labels = np.concatenate((np.zeros(len(fake_news)), np.ones(len(real_news))))
 
-k_fold = 5
-train_dataset, test_dataset = k_fold_cross_validation(documents, k_fold)
 
-def fit_model(documents, labels):
-    RandomForestTextPCA.fit(documents, labels)
-    GradientBoostingTextPCA.fit(documents, labels)
-    LogisticTextPCA.fit(documents, labels)
-    RandomForestText.fit(documents, labels)
-    GradientBoostingText.fit(documents, labels)
-    LogisticText.fit(documents, labels)
+models = create_models()
+eval_scores = {}
+for model_lbl, model in models.items():
+    print(f'Evaluating : {model_lbl}')
+    eval_scores[model_lbl] = list(evaluate_model(model, documents, labels))
+    print(f'Acc : {np.mean(eval_scores[model_lbl])} | Stdev : {np.std(eval_scores[model_lbl])}')
 
-def evaluate_model(documents, labels):
-    randomforestpca_acc = RandomForestTextPCA.evaluate(documents, labels)['accuracy']
-    gradboostpca_acc = GradientBoostingTextPCA.evaluate(documents, labels)['accuracy']
-    logisticpca_acc = LogisticTextPCA.evaluate(documents, labels)['accuracy']
-    randomforest_acc = RandomForestText.evaluate(documents, labels)['accuracy']
-    gradboost_acc = GradientBoostingText.evaluate(documents, labels)['accuracy']
-    logistic_acc = LogisticText.evaluate(documents, labels)['accuracy']
-    return {
-        'randomforestpca': randomforestpca_acc,
-        'gradboostpca': gradboostpca_acc,
-        'logisticpca': logisticpca_acc,
-        'randomforest': randomforest_acc,
-        'gradboost': gradboost_acc,
-        'logistic': logistic_acc
-    }
+with open('result_accuracy.json', 'w+') as acc_fp:
+    json.dump(eval_scores, acc_fp)
 
-for train, test in zip(train_dataset, test_dataset):
-    xtrain, xtest, ytrain, ytest = documents[train], documents[test], labels[train], labels[test]
-    fit_model(xtrain, ytrain)
-    print(evaluate_model(xtest, ytest))
+print("Processing Successful")
+print("Runtime :", time.time() - t)
