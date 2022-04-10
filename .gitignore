@@ -1,5 +1,5 @@
 news_dataset
-fake_real.png
+*.png
 __pycache__
 acc_plot/*
 archives/*
