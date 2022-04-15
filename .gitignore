@@ -3,5 +3,6 @@ news_dataset
 __pycache__
 acc_plot/*
 archives/*
+models/*
 result_accuracy.json
 result.json

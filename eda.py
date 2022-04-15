@@ -51,7 +51,7 @@ pca_dim_red = TextDimRed(PCA, 2)
 svd_dim_red = TextDimRed(TruncatedSVD, 2)
 
 fake_news, real_news = get_news_dataset()
-data_limit = 100
+data_limit = 10000
 # Limit the data (for low RAM capacity purpose)
 if data_limit:
     fake_news = fake_news[:data_limit]
@@ -71,3 +71,4 @@ plt.title('Trancated SVD')
 svd_dim_red.plot(documents, labels)
 plt.savefig('svd.png')
 plt.show()
+
